@@ -1,16 +1,8 @@
 import re 
 
-raw_input_base = """Register A: 130504279429904
-Register B: 0
-Register C: 0
+raw_input_base = """"""
 
-Program: 0,3,5,4,3,0"""
-
-raw_input_full = """Register A: 7
-Register B: 0
-Register C: 0
-
-Program: 2,4,1,1,7,5,1,5,4,5,0,3,5,5,3,0"""
+raw_input_full = """"""
 
 raw_input = raw_input_full
 
@@ -81,6 +73,48 @@ def puzzle_1(init_registers, program):
 
     print(','.join(map(str, outputs)))
 
-    return 
+    return outputs
 
 puzzle_1(registers, program)
+
+# ok, we need to copy the second program 
+
+# register_value = 0
+# for i in range(len(program) - 2, -1, -1): 
+#     digit = program[i]
+#     current_digit_iter = 0
+
+#     outputs = puzzle_1([register_value, 0, 0], program)
+#     while outputs[0] != digit and current_digit_iter < 8: 
+#         register_value += 1
+#         current_digit_iter += 1
+#         # print(register_value)
+#         outputs = puzzle_1([register_value, 0, 0], program)
+
+
+#     # so then we multiply by 8 and go for the next one right? 
+#     print(f'Moving to next digit at {register_value} which is {current_digit_iter} offset')
+#     register_value = register_value * 8
+
+# print(register_value)
+
+# this literally works up until the last digit???
+
+# ok so i think we can make this recursive to see if we can get it, what is happening above (I think) is that there are multiple times you can get the right digit 
+
+def rec_puzzle_2(register_val, curr_offset, digit_to_test):
+    outputs = puzzle_1([register_val, 0, 0], program)
+
+    if outputs == [2, 4, 1, 1, 7, 5, 1, 5, 4, 5, 0, 3, 5, 5, 3, 0]: 
+        print('I FOUND IT FINALLY', register_val)
+
+    if program[digit_to_test] == outputs[0]: 
+        print(outputs)
+        for i in range(8): 
+            rec_puzzle_2(register_val * 8 + i, i, digit_to_test - 1)
+    else: 
+        return 
+    
+for i in range(8): 
+    rec_puzzle_2(i, 0, len(program) - 1)
+
